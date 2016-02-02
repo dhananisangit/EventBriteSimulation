@@ -1,0 +1,35 @@
+<html>
+<head>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+    $(document).ready(function() {
+
+        var token = 'ESS74QGJ4DENACAOB5MA';
+        var $events = $("#events");
+
+        $.get('https://www.eventbriteapi.com/v3/events/search/?categories=117,118,119&token='+token+'', function(res) {
+                var sjd="";
+                for(var i=0;i<res.events.length;i++) {
+                   // var event = res.events[i];
+                    //console.dir(event);
+                    alert("hello");
+                    s +='<h4>'+ "<br/>"+ data.events[i].name.text + '<br>'+'</h4>';
+                }
+
+                $events.html(s);
+
+        });
+
+
+    });
+    </script>
+</head>
+<body>
+{% block content %}
+<h2>Upcoming Events!</h2>
+<div id="events"></div>
+{% endblock %}
+</body>
+</html>
+

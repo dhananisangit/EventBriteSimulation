@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<h1>EventBrite</h1>
+</head>
+<body>
+{% block content %}
+    <h1>Select 3 or more categories of events which you would like to attend:</h1>
+    <br/>
+<div id="result" style="text-align:center">
+</div>
+<script>
+   var getJSON = function(url) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status == 200) {
+        resolve(xhr.response);
+      } else {
+        reject(status);
+      }
+    };
+    xhr.send();
+  });
+};
+
+ var jsonData=getJSON('https://www.eventbriteapi.com/v3/categories/?token=ESS74QGJ4DENACAOB5MA').then(function(data)
+ {
+     var sjd='<form action="/categorized" method="GET">';
+    for(var i=0; i<data.categories.length; i++)
+     {
+        sjd +='<h4>'+ "<br/>" +'<input type="checkbox" name="events" value='+data.categories[i].id+'>'+ data.categories[i].name + '<br>'+'</h4>';
+     }
+     sjd+='<input type="submit" value="Submit">';
+     sjd+='</form>';
+     document.getElementById("result").innerHTML = sjd ;
+ }
+ );
+</script>
+{% endblock %}
+</body>
+</html>

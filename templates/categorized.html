@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+       <title>EventBrite</title>
+</head>
+<body>
+{% block content %}
+<h1><b>List of events:</b></h1>
+    <div id="events" ></div>
+<script>
+    var number=1;
+    var currentURL = window.location.search.substring(1);
+    currentURL+=3;
+    var queryStart = currentURL.indexOf("?")+ 1;
+    var queryEnd = currentURL.indexOf(currentURL.length)+1;
+    var events = currentURL.slice(queryStart,queryEnd-1);
+    var code="";
+     var VariableArray = events.split('&');
+    for(var i = 0; i < VariableArray.length; i++){
+        var Value = VariableArray[i].split('=');
+        code += Value[1];
+        if(i<2)
+        {
+            code+="%2C";
+        }
+    }
+    function first(){
+        number = 1;
+         var jsonData = getJSON('https://www.eventbriteapi.com/v3/events/search/?token=ESS74QGJ4DENACAOB5MA&page=' + number + '&categories=' + code + '').then(function (data) {
+                var sjd = "";
+                for (var i = 0; i < data.events.length; i++) {
+                    var url = data.events[i].url;
+                    var startdate = data.events[i].start.local;
+                    var splitstartdate = startdate.split("T");
+                    var time = splitstartdate[1].split(":");
+                    var zone = data.events[i].start.timezone;
+                    var splitzone = zone.split("/");
+                    if (time[0] < 12) {
+                        var hour = "AM";
+                    }
+                    else if (time[0] == 12) {
+                        var hour = "PM";
+                    }
+                    else {
+                        time[0] -= 12;
+                        var hour = "PM";
+                    }
+                    sjd += '<h4>' + "<br/>" + '<b>' + data.events[i].name.text + '</b>' +
+                            '<a href="' + url + '">' + ' Know More' + '</a>' + '<br>' + '</h4>' +
+                            '<h5>' + ' Event on ' + splitstartdate[0] + " At " + time[0] + ":" + time[1]
+                            + hour + ' in ' + splitzone[1] + '</h5>';
+
+                }
+                document.getElementById("events").innerHTML = sjd;
+            }
+    );
+    }
+
+    function laquo(){
+        if(number!=1) {
+            number--;
+
+        }
+        else{number=1;}
+         var jsonData = getJSON('https://www.eventbriteapi.com/v3/events/search/?token=ESS74QGJ4DENACAOB5MA&page=' + number + '&categories=' + code + '').then(function (data) {
+                var sjd = "";
+                for (var i = 0; i < data.events.length; i++) {
+                    var url = data.events[i].url;
+                    var startdate = data.events[i].start.local;
+                    var splitstartdate = startdate.split("T");
+                    var time = splitstartdate[1].split(":");
+                    var zone = data.events[i].start.timezone;
+                    var splitzone = zone.split("/");
+                    if (time[0] < 12) {
+                        var hour = "AM";
+                    }
+                    else if (time[0] == 12) {
+                        var hour = "PM";
+                    }
+                    else {
+                        time[0] -= 12;
+                        var hour = "PM";
+                    }
+                    sjd += '<h4>' + "<br/>" + '<b>' + data.events[i].name.text + '</b>' +
+                            '<a href="' + url + '">' + ' Know More' + '</a>' + '<br>' + '</h4>' +
+                            '<h5>' + ' Event on ' + splitstartdate[0] + " At " + time[0] + ":" + time[1]
+                            + hour + ' in ' + splitzone[1] + '</h5>';
+
+                }
+                document.getElementById("events").innerHTML = sjd;
+            }
+    );
+    }
+
+    function raquo(){
+        number++;
+         var jsonData = getJSON('https://www.eventbriteapi.com/v3/events/search/?token=ESS74QGJ4DENACAOB5MA&page=' + number + '&categories=' + code + '').then(function (data) {
+                var sjd = "";
+                for (var i = 0; i < data.events.length; i++) {
+                    var url = data.events[i].url;
+                    var startdate = data.events[i].start.local;
+                    var splitstartdate = startdate.split("T");
+                    var time = splitstartdate[1].split(":");
+                    var zone = data.events[i].start.timezone;
+                    var splitzone = zone.split("/");
+                    if (time[0] < 12) {
+                        var hour = "AM";
+                    }
+                    else if (time[0] == 12) {
+                        var hour = "PM";
+                    }
+                    else {
+                        time[0] -= 12;
+                        var hour = "PM";
+                    }
+                    sjd += '<h4>' + "<br/>" + '<b>' + data.events[i].name.text + '</b>' +
+                            '<a href="' + url + '">' + ' Know More' + '</a>' + '<br>' + '</h4>' +
+                            '<h5>' + ' Event on ' + splitstartdate[0] + " At " + time[0] + ":" + time[1]
+                            + hour + ' in ' + splitzone[1] + '</h5>';
+
+                }
+                document.getElementById("events").innerHTML = sjd;
+            }
+    );
+    }
+
+
+  var getJSON = function(url) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status == 200) {
+        resolve(xhr.response);
+      } else {
+          alert("Oops!! It seems you selected less than 3 categories.");
+        reject(status);
+      }
+    };
+    xhr.send();
+  });
+}
+
+
+            var jsonData = getJSON('https://www.eventbriteapi.com/v3/events/search/?token=ESS74QGJ4DENACAOB5MA&page=' + number + '&categories=' + code + '').then(function (data) {
+                var sjd = "";
+                for (var i = 0; i < data.events.length; i++) {
+                    var url = data.events[i].url;
+                    var startdate = data.events[i].start.local;
+                    var splitstartdate = startdate.split("T");
+                    var time = splitstartdate[1].split(":");
+                    var zone = data.events[i].start.timezone;
+                    var splitzone = zone.split("/");
+                    if (time[0] < 12) {
+                        var hour = "AM";
+                    }
+                    else if (time[0] == 12) {
+                        var hour = "PM";
+                    }
+                    else {
+                        time[0] -= 12;
+                        var hour = "PM";
+                    }
+                    sjd += '<h4>' + "<br/>" + '<b>' + data.events[i].name.text + '</b>' +
+                            '<a href="' + url + '">' + ' Know More' + '</a>' + '<br>' + '</h4>' +
+                            '<h5>' + ' Event on ' + splitstartdate[0] + " At " + time[0] + ":" + time[1]
+                            + hour + ' in ' + splitzone[1] + '</h5>';
+
+                }
+                document.getElementById("events").innerHTML = sjd;
+            }
+    );
+
+</script>
+
+    <div class="container" style="text-align: center;">
+    <ul class="pagination pagination-lg">
+        <li><a href="#" onclick="first()" >First</a></li>
+        <li><a href="#" onclick="laquo()" >&laquo;</a></li>
+        <li><a href="#" onclick="raquo()" >&raquo;</a></li>
+    </ul>
+    </div>
+
+{% endblock %}
+</body>
+</html>
